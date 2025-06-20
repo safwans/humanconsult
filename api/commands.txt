@@ -1,0 +1,33 @@
+# Init
+gcloud init
+
+# Login
+gcloud auth login
+
+# Get current project
+gcloud config get-value project
+
+# Set project id
+gcloud config set project crested-unity-391222
+
+# Create a docker image
+gcloud builds submit --tag us-central1-docker.pkg.dev/crested-unity-391222/cloudrun-images/humanconsult
+
+# Deploy Cloud Run
+gcloud run deploy humanconsult --image=us-central1-docker.pkg.dev/crested-unity-391222/cloudrun-images/humanconsult:latest --region=us-central1 --allow-unauthenticated
+
+# Redeploy with changes
+gcloud run deploy humanconsult \
+  --source . \
+  --image us-central1-docker.pkg.dev/crested-unity-391222/cloudrun-images/humanconsult \
+  --region us-central1 \
+  --allow-unauthenticated
+
+
+gcloud run deploy humanconsult \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated
+
+# Test api
+curl -X POST https://humanconsult-711566525822.us-central1.run.app/api -H "Content-Type: application/json" -d '{"message": "Hello, world!"}'
